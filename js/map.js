@@ -1,5 +1,8 @@
 'use strict';
 
+/*активная страница*/
+var getActiveMap = function () {
+
 /*шаблонные данные*/
 var avatarsList = [
   'img/avatars/user01.png',
@@ -123,7 +126,6 @@ for (let i = 0; i < annoncmentAmount ; i++) {
   annoncments.push(createObj());
 }
 
-var map = document.querySelector('.map').classList.remove('map--faded');
 var templatePin = document.querySelector('.map__pin');
 
 /*создание указателей*/
@@ -164,7 +166,7 @@ var createFeature = function (features, list) {
     list.children[0].remove();
   }
   /*создание своего*/
-  for (var i = 0; i < features.length; i++) {
+  for (let i = 0; i < features.length; i++) {
     var li = document.createElement('li');
     var classLi = 'popup__feature--' + features[i];
     li.classList.add('popup__feature', classLi);
@@ -174,7 +176,6 @@ var createFeature = function (features, list) {
 
 var fragment = document.createDocumentFragment();
 var templateCard = document.querySelector('#card').content.querySelector('.map__card');
-console.log(templateCard);
 
 /*создание обьявлений*/
 var createCard = function (obj) {
@@ -197,21 +198,59 @@ var createCard = function (obj) {
     card.querySelector('.popup__photos').appendChild(photoClone);
   }
 
-  console.log(card);
   return card;
 }
 
+/*маркеры на страницу*/
 var pinList = document.querySelector('.map__pins');
 var map = document.querySelector('.map');
 
-for (var i = 0; i < annoncmentAmount; i++) {
-  fragment.appendChild(createPin(annoncments[i]));
+for (let i = 0; i < annoncmentAmount; i++) {
+  var pinAnnoncment = createPin(annoncments[i]);
+  pinAnnoncment.setAttribute('data-index', i);
+  fragment.appendChild(pinAnnoncment);
 }
 
 pinList.appendChild(fragment);
 
-for (var i = 0; i < annoncmentAmount; i++) {
-  fragment.appendChild(createCard(annoncments[i]));
+fragment.appendChild(createCard(annoncments[0]));
+map.appendChild(fragment);
+
+/*обьявление по клику на маркер*/
+
+var pins = document.querySelectorAll('.map__pin');
+for (let i = 0; i < pins.length; i++) {
+  pins[i].addEventListener('click', function(){
+    var pinIndex = parseInt(pins[i].getAttribute('data-index'));
+    fragment.appendChild(createCard(annoncments[pinIndex]));
+    map.appendChild(fragment);
+  });
 }
 
-map.appendChild(fragment);
+}
+
+/*блокирование формы */
+var noticeForm = document.querySelector('.ad-form');
+var fieldsets = noticeForm.querySelectorAll('.ad-form fieldset');
+for (let i = 0; i < fieldsets.length; i++) {
+  fieldsets[i].setAttribute('disabled', '');
+}
+
+var mark = document.querySelector('.map__pin');
+var addressField = document.querySelector('#address');
+
+/*получение адреса*/
+var getAddress = function (mark) {
+  var addressValue = mark.style.left.slice(0, -2) + ' ' + mark.style.top.slice(0, -2);
+  return addressValue;
+}
+
+/*событие активации карты*/
+mark.addEventListener('mouseup', function () {
+  var map = document.querySelector('.map').classList.remove('map--faded');
+  getActiveMap();
+  addressField.value = getAddress(mark);
+  for (let i = 0; i < fieldsets.length; i++) {
+    fieldsets[i].removeAttribute('disabled', '');
+  }
+});
