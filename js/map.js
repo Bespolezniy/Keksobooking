@@ -1,5 +1,6 @@
 'use strict';
 
+/*шаблонные данные*/
 var avatarsList = [
   'img/avatars/user01.png',
   'img/avatars/user02.png',
@@ -58,31 +59,30 @@ const MAX_X = 1190;
 const MIN_Y = 130;
 const MAX_Y = 630;
 
+/*случайный элемент массива*/
 var getRandomIndex = function(array) {
  return  Math.floor(Math.random() * array.length);
 }
 
-console.log(featuresList[getRandomIndex(featuresList)]);
-
+/*случайное число в пределах max и min */
 var getRandomNumber = function(minValue, maxValue) {
   var random = minValue + Math.random() * (maxValue + 1 - minValue);
   return Math.floor(random);
 };
 
+/*перемешивание массива*/
 var compareRandom = function(a, b) {
   return Math.random() - 0.5;
 };
 
+/*массив случайной длинны*/
 var getRandomArray = function(array) {
   array.sort(compareRandom);
   var start = getRandomIndex(array);
   return array.slice(start);
 }
 
-photosList.sort(compareRandom);
-
-
-
+/*создание обьектов с данными для обьявлений*/
 var createObj = function () {
   var locationX = getRandomNumber(MIN_X, MAX_X);
   var locationY = getRandomNumber(MIN_Y, MAX_Y)
@@ -115,21 +115,18 @@ var createObj = function () {
   return annoncmentObj;
 }
 
+/*создание массива с этими обьектами*/
 var annoncmentAmount = 8;
 var annoncments = [];
-
 
 for (let i = 0; i < annoncmentAmount ; i++) {
   annoncments.push(createObj());
 }
 
-console.log(annoncments);
-
 var map = document.querySelector('.map').classList.remove('map--faded');
 var templatePin = document.querySelector('.map__pin');
-var clone = templatePin.cloneNode(true);
-console.log(templatePin);
 
+/*создание указателей*/
 var createPin = function (obj) {
   var pin = templatePin.cloneNode(true);
 
@@ -140,7 +137,7 @@ var createPin = function (obj) {
   return pin;
 }
 
-
+/*тип в нужный формат преобразуем*/
 var formatType = function (type) {
   var rightFormat;
   switch (type) {
@@ -160,25 +157,47 @@ var formatType = function (type) {
   return rightFormat;
 }
 
-var fragment = document.createDocumentFragment();
+/*создание списка преимуществ*/
+var createFeature = function (features, list) {
+  /*удаление шаблонного списка*/
+  while (list.children.length) {
+    list.children[0].remove();
+  }
+  /*создание своего*/
+  for (var i = 0; i < features.length; i++) {
+    var li = document.createElement('li');
+    var classLi = 'popup__feature--' + features[i];
+    li.classList.add('popup__feature', classLi);
+    list.appendChild(li);
+  }
+}
 
-var templateCard = document.querySelector('.map__card');
+var fragment = document.createDocumentFragment();
+var templateCard = document.querySelector('#card').content.querySelector('.map__card');
 console.log(templateCard);
 
+/*создание обьявлений*/
 var createCard = function (obj) {
   var card = templateCard.cloneNode(true);
 
-  card.querySelector('img').src = obj.author.avatar;
+  card.querySelector('.popup__avatar').src = obj.author.avatar;
   card.querySelector('.popup__title').textContent = obj.offer.title;
   card.querySelector('.popup__text--address').textContent = obj.offer.address;
   card.querySelector('.popup__text--price').textContent = obj.offer.price + ' ₽/ночь.';
   card.querySelector('.popup__type').textContent = formatType(obj.offer.type);
-  card.querySelector('.popup__text--capacity').textContent = obj.offer.rooms + ' комнаты для' + obj.offer.guests + ' гостей.';
-  card.querySelector('.popup__text--time').textContent = 'Заезд после ' + obj.offer.checkin + ' выезд до' + obj.offer.checkout;
-  card.querySelector('.popup__features').textContent = obj.offer.features;
+  card.querySelector('.popup__text--capacity').textContent = obj.offer.rooms + ' комнаты для ' + obj.offer.guests + ' гостей.';
+  card.querySelector('.popup__text--time').textContent = 'Заезд после ' + obj.offer.checkin + ' выезд до ' + obj.offer.checkout;
+  createFeature(obj.offer.features, card.querySelector('.popup__features'));
   card.querySelector('.popup__description').textContent = obj.offer.description;
-  card.querySelector('popup__photo').src = obj.offer.photos[0];
+  card.querySelector('.popup__photo').src = obj.offer.photos[0];
 
+  for (let i = 1; i < obj.offer.photos.length; i++) {
+    var photoClone = document.querySelector('#card').content.querySelector('.popup__photo').cloneNode(true);
+    photoClone.src = obj.offer.photos[i];
+    card.querySelector('.popup__photos').appendChild(photoClone);
+  }
+
+  console.log(card);
   return card;
 }
 
