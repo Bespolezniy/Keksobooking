@@ -1,7 +1,9 @@
 'use strict';
 
-/*активная страница*/
-var getActiveMap = function () {
+/*модуль создания обьявлений и маркеров*/
+( function () {
+
+window.getActiveMap = function () {
 
 /*шаблонные данные*/
 var avatarsList = [
@@ -227,30 +229,4 @@ for (let i = 0; i < pins.length; i++) {
   });
 }
 
-}
-
-/*блокирование формы */
-var noticeForm = document.querySelector('.ad-form');
-var fieldsets = noticeForm.querySelectorAll('.ad-form fieldset');
-for (let i = 0; i < fieldsets.length; i++) {
-  fieldsets[i].setAttribute('disabled', '');
-}
-
-var mark = document.querySelector('.map__pin');
-var addressField = document.querySelector('#address');
-
-/*получение адреса*/
-var getAddress = function (mark) {
-  var addressValue = mark.style.left.slice(0, -2) + ' ' + mark.style.top.slice(0, -2);
-  return addressValue;
-}
-
-/*событие активации карты*/
-mark.addEventListener('mouseup', function () {
-  var map = document.querySelector('.map').classList.remove('map--faded');
-  getActiveMap();
-  addressField.value = getAddress(mark);
-  for (let i = 0; i < fieldsets.length; i++) {
-    fieldsets[i].removeAttribute('disabled', '');
-  }
-});
+}})();

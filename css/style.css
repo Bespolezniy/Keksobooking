@@ -1248,3 +1248,21 @@ fieldset {
   outline: none;
   opacity: 0.6;
 }
+
+.unvalid__value {
+  animation-name: unvalid;
+  animation-duration: 3s;
+}
+
+@keyframes unvalid {
+  0% {
+    background: red;
+  }
+  30% { background: white;
+  }
+  60% {
+    background: red;
+  }
+  90% { background: white;
+  }
+}
