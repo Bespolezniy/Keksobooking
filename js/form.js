@@ -4,7 +4,7 @@
 (function () {
 
   /*блокирование формы */
-  var noticeForm = document.querySelector('.ad-form');
+  window.noticeForm = document.querySelector('.ad-form');
   window.fieldsets = noticeForm.querySelectorAll('.ad-form fieldset');
 
   for (let i = 0; i < fieldsets.length; i++) {
@@ -50,6 +50,7 @@
     } else {
       createMessage('#success', '.success');
     }
+
   });
 
 })();

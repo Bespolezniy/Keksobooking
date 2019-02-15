@@ -12,18 +12,18 @@
     return addressValue;
   }
 
-  var ADDRESS_Y_INT_MIN = 130;
-  var ADDRESS_Y_INT_MAX = 630;
+  const ADDRESS_Y_INT_MIN = 130;
+  const ADDRESS_Y_INT_MAX = 630;
 
-  var MAIN_PIN = {
+  const MAIN_PIN = {
       SIDE: 62,
       HEIGHT: 84,
       ARROW_HEIGHT: 22,
       PEAK: 1
     };
 
-  var COORDINATION_LIMIT_TOP = ADDRESS_Y_INT_MIN - MAIN_PIN.HEIGHT;
-  var COORDINATION_LIMIT_BOTTOM = ADDRESS_Y_INT_MAX - MAIN_PIN.HEIGHT;
+  const COORDINATION_LIMIT_TOP = ADDRESS_Y_INT_MIN - MAIN_PIN.HEIGHT;
+  const COORDINATION_LIMIT_BOTTOM = ADDRESS_Y_INT_MAX - MAIN_PIN.HEIGHT;
 
   /*перемещение маркера*/
   var moveMarker = function (evt) {
@@ -80,16 +80,17 @@
           getActiveMap();
           map.classList.remove('map--count');
       }
-      
+
       addressField.value = getAddress(marker);
 
-      for (let i = 0; i < fieldsets.length; i++) {
+      for (let i = 0; i < window.fieldsets.length; i++) {
         fieldsets[i].removeAttribute('disabled', '');
       }
 
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
     }
+
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
     });
