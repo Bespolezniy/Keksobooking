@@ -7,9 +7,9 @@
   window.noticeForm = document.querySelector('.ad-form');
   window.fieldsets = noticeForm.querySelectorAll('.ad-form fieldset');
 
-  for (let i = 0; i < fieldsets.length; i++) {
-    fieldsets[i].setAttribute('disabled', '');
-  }
+  fieldsets.forEach(function(element){
+    element.setAttribute('disabled', '');
+  });
 
   var guestsAmount = noticeForm.querySelector('#capacity');
   var roomAmount = noticeForm.querySelector('#room_number');
@@ -23,6 +23,7 @@
     /*если невалидное обьявление*/
     if (selectorElement == '.error') {
       var btnClose = message.querySelector('.error__button');
+
       btnClose.addEventListener('click', function () {
         message.remove();
 
@@ -42,13 +43,31 @@
     return noticeForm.appendChild(message);
   }
 
+  /*удалние сообщения*/
+  var deleteMessage = function(message) {
+    message.remove();
+  }
+
   /*валидация*/
   noticeForm.addEventListener('submit', function(evt) {
     evt.preventDefault();
+
     if (guestsAmount.value > roomAmount.value || price.value < 0 ) {
       createMessage('#error', '.error');
     } else {
-      createMessage('#success', '.success');
+      var messageOk = createMessage('#success', '.success');
+
+      messageOk.addEventListener('click', function (){
+        messageOk.remove();
+      });
+
+      // создать объект для формы
+      const URL_FORM = 'https://js.dump.academy/keksobooking.';
+      var formData = new FormData(noticeForm);
+
+      // отослать
+      window.xhr.open("POST", URL_FORM);
+      window.xhr.send(formData);
     }
 
   });

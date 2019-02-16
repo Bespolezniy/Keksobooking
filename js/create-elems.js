@@ -16,7 +16,7 @@
       pin.querySelector('img').alt = obj.offer.title;
 
       return pin;
-    }
+    };
 
     /*тип в нужный формат преобразуем*/
     var formatType = function (type) {
@@ -36,21 +36,24 @@
           break;
       }
       return rightFormat;
-    }
+    };
 
     /*создание списка преимуществ*/
     var createFeature = function (features, list) {
+
       /*удаление шаблонного списка*/
       while (list.children.length) {
         list.children[0].remove();
-      }
+      };
+
       /*создание своего*/
-      for (let i = 0; i < features.length; i++) {
+      features.forEach( function(element) {
         var li = document.createElement('li');
-        var classLi = 'popup__feature--' + features[i];
+        var classLi = 'popup__feature--' + element;
         li.classList.add('popup__feature', classLi);
         list.appendChild(li);
-      }
+      });
+
     }
 
     var fragment = document.createDocumentFragment();
@@ -73,6 +76,7 @@
 
       for (let i = 1; i < obj.offer.photos.length; i++) {
         var photoClone = document.querySelector('#card').content.querySelector('.popup__photo').cloneNode(true);
+
         photoClone.src = obj.offer.photos[i];
         card.querySelector('.popup__photos').appendChild(photoClone);
       }
@@ -86,30 +90,44 @@
     }
 
     /*маркеры на страницу*/
-    var pinList = document.querySelector('.map__pins');
-    var map = document.querySelector('.map');
+    window.setPinsOnMap = function (array) {
 
-    for (let i = 0; i < window.annoncmentAmount; i++) {
-      var pinAnnoncment = createPin(annoncments[i]);
-      pinAnnoncment.setAttribute('data-index', i);
-      fragment.appendChild(pinAnnoncment);
-    }
+      var pinList = document.querySelector('.map__pins');
+      window.map = document.querySelector('.map');
 
-    pinList.appendChild(fragment);
+      for (let i = 0; i < array.length; i++) {
+          var pinAnnoncment = createPin(array[i]);
 
-    fragment.appendChild(createCard(window.annoncments[0]));
-    map.appendChild(fragment);
+          pinAnnoncment.setAttribute('data-index', i);
+          fragment.appendChild(pinAnnoncment);
+       }
+
+      pinList.appendChild(fragment);
+
+      fragment.appendChild(createCard(array[0]));
+      map.appendChild(fragment);
+
+    };
+
+    setPinsOnMap(window.annoncments);
 
      /*обьявление по клику на маркер*/
+    window.pins = document.querySelectorAll('.map__pin');
 
-    var pins = document.querySelectorAll('.map__pin');
-    for (let i = 0; i < pins.length; i++) {
-      pins[i].addEventListener('click', function(){
-        var pinIndex = parseInt(pins[i].getAttribute('data-index'));
-        fragment.appendChild(createCard(window.annoncments[pinIndex]));
-        map.appendChild(fragment);
+    pins.forEach(function(element){
+      element.addEventListener('click', function(){
+      var pinIndex = parseInt(element.getAttribute('data-index'));
+
+      fragment.appendChild(createCard(window.annoncments[pinIndex]));
+      map.appendChild(fragment);
       });
-    }
-  }
+    });
+  };
+
+  window.removePins = function() {
+    pins.forEach(function(element) {
+      element.remove();
+    });
+  };
 
 })();

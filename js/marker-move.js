@@ -10,7 +10,7 @@
   var getAddress = function (mark) {
     var addressValue = mark.style.left.slice(0, -2) + ' ' + mark.style.top.slice(0, -2);
     return addressValue;
-  }
+  };
 
   const ADDRESS_Y_INT_MIN = 130;
   const ADDRESS_Y_INT_MAX = 630;
@@ -74,22 +74,21 @@
 
     var onMouseUp = function (evtUp) {
       evt.preventDefault();
-      map.classList.remove('map--faded');
 
-        if (map.classList.contains('map--count')) {
+        if (map.classList.contains('map--faded')) {
+          map.classList.remove('map--faded');
           getActiveMap();
-          map.classList.remove('map--count');
-      }
+        }
 
       addressField.value = getAddress(marker);
 
       for (let i = 0; i < window.fieldsets.length; i++) {
         fieldsets[i].removeAttribute('disabled', '');
-      }
+      };
 
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
-    }
+    };
 
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);

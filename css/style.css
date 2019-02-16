@@ -1017,6 +1017,7 @@ fieldset {
 }
 
 .popup__avatar {
+  background: #fff;
   position: absolute;
   bottom: 100%;
   left: 0;
