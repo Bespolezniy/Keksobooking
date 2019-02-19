@@ -1,9 +1,7 @@
 'use strict';
 
-( function () {
-
-  var filtersForm = document.querySelector('.map__filters');
-
+/*модуль сортировки обьявлений*/
+(function () {
   var filters = {
     'housing-type': 'any',
     'housing-price': 'any',
@@ -11,7 +9,7 @@
     'housing-guests': 'any'
   };
 
-  const PRICE_RANGE = {
+  var PRICE_RANGE = {
     'middle': {
       'from': 10000,
       'to': 49999
@@ -35,73 +33,73 @@
     'conditioner': false
   };
 
+  /*задание фильтров*/
   var setFilters = function (evt) {
+
     if (evt.target.name === 'features') {
       features[evt.target.value] = evt.target.checked;
       return;
     } else {
       filters[evt.target.name] = evt.target.value;
     }
-
-    /*applyFilters();*/
   };
 
   var applyFilters = function () {
+    /*тип*/
     var filterOfType = function (item) {
-      return (
-        filters['housing-type'] === 'any' ||
-        item.offer.type === filters['housing-type']
+      return ( filters['housing-type'] === 'any' ||  item.offer.type === filters['housing-type']);
+    };
+
+    /*цена*/
+    var filterOfPrice = function (item) {
+      return (filters['housing-price'] === 'any' || item.offer.price >= PRICE_RANGE[filters['housing-price']].from && item.offer.price <= PRICE_RANGE[filters['housing-price']].to
       );
-    }
-      var filterOfPrice = function (item) {
-        return (
-          filters['housing-price'] === 'any' ||
-          item.offer.price >= PRICE_RANGE[filters['housing-price']].from && item.offer.price <= PRICE_RANGE[filters['housing-price']].to
-        );
-      };
+    };
 
-      var filterOfRooms = function (item) {
-        return (
-          filters['housing-rooms'] === 'any' ||
-          item.offer.rooms === parseInt(filters['housing-rooms'], 10)
-        );
-      };
+    /*комнаты*/
+    var filterOfRooms = function (item) {
+      return ( filters['housing-rooms'] === 'any' || item.offer.rooms === parseInt(filters['housing-rooms'], 10)
+      );
+    };
 
-      var filterOfGuests = function (item) {
-        return (
-          filters['housing-guests'] === 'any' ||
-          item.offer.guests === parseInt(filters['housing-guests'], 10)
-        );
-      };
+    /*гости*/
+    var filterOfGuests = function (item) {
+      return (filters['housing-guests'] === 'any' || item.offer.guests === parseInt(filters['housing-guests'], 10)
+      );
+    };
 
-      var filterOfFeatures = function (item) {
-        var result = true;
-        for (var key in features) {
-          if (features[key] && item.offer.features.indexOf(key) === -1) {
-            result = false;
-            break;
+    /*преимущества*/
+    var filterOfFeatures = function (item) {
+      var result = true;
+
+      for (var key in features) {
+
+        if (features[key] && item.offer.features.indexOf(key) === -1) {
+          result = false;
+          break;
         }
-      }
 
+      }
       return result;
     };
 
+    /*прогоняем через фильтр*/
     var filter = function () {
-      return window.annoncments.filter(function (item) {
-        return (
-          filterOfType(item) &&
-          filterOfPrice(item) &&
-          filterOfRooms(item) &&
-          filterOfGuests(item) &&
-          filterOfFeatures(item)
-        );
+      return window.data.hotelPins.filter(function (item) {
+        return (filterOfType(item) && filterOfPrice(item) && filterOfRooms(item) &&  filterOfGuests(item) && filterOfFeatures(item) );
       });
     };
-    window.annoncments.filtaredPins = filter();
-    window.removePins();
-    window.setPinsOnMap(window.annoncments);
+    window.data.filtratedPins = filter();
+    window.map.removePins();
+    window.map.renderPinsOnMap(window.data.filtratedPins);
   };
 
-  filtersForm.addEventListener('change', setFilters);
+  var debouncePins = window.utils.debounce(applyFilters);
+
+  window.data.mapFilters.addEventListener('change', function (evt) {
+    window.map.removeCard();
+    setFilters(evt);
+    debouncePins();
+  });
 
 })();
