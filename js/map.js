@@ -40,7 +40,7 @@
       removeCard();
 
       evt.target.closest('.map__pin').classList.add('map__pin--active');
-      setCardOnMap(window.data.filtratedHotelPins[clickedElement]);
+      setCardOnMap(window.data.filtratedPins[clickedElement]);
 
       var popupClose = document.querySelector('.popup__close');
 

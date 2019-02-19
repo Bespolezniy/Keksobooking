@@ -155,14 +155,14 @@
     document.addEventListener('click', onFormHideClick);
     /*сброс*/
     errorButton.addEventListener('mousedown', function () {
-      window.load.uploadData(new FormData(window.data.noticeForm));
+      window.backend.uploadData(new FormData(window.data.noticeForm));
     });
   };
 
   window.data.noticeForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
     address.removeAttribute('disabled');
-    window.load.uploadData(new FormData(window.data.noticeForm));
+    window.backend.uploadData(new FormData(window.data.noticeForm));
   });
 
   var onFormResetClick = function () {
@@ -178,7 +178,7 @@
     window.data.map.classList.add('map--faded');
     window.data.noticeForm.classList.toggle('ad-form--disabled');
     setPlaceholderAndMinPrice(window.data.PRICE_OF_TYPE_DEFAULT);
-    window.map.setPositionPinMain(window.data.PIN_MAIN_X, window.data.PIN_MAIN_Y);
+    window.map.setPositionMainMarker(window.data.PIN_MAIN_X, window.data.PIN_MAIN_Y);
     setAddreessCoords(window.data.PIN_MAIN_X, window.data.PIN_MAIN_Y);
     window.data.marker.addEventListener('mouseup', window.map.onMarkerMouseup);
   };

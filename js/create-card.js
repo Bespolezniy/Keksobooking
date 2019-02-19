@@ -18,7 +18,7 @@
     var cardPhotos = card.querySelector('.popup__photos');
     var cardAvatar = card.querySelector('.popup__avatar');
 
-    var getFieldsCard = function (field, value, textPrice) {
+    var getFields = function (field, value, textPrice) {
 
       if (value) {
         textPrice = textPrice || '';
@@ -32,7 +32,7 @@
 
     /*заполняем поле тип*/
     var getTypeField  = function (field, type) {
-      field.textContent = type ? window.data.Types[type.toUpperCase()] : '';
+      field.textContent = type ? window.data.TYPES[type.toUpperCase()] : '';
     };
 
     /*заполняем поле гости*/
@@ -84,17 +84,17 @@
     };
 
     /*создание*/
-    getFieldsCard(cardTitle, data.offer.title);
-    getFieldsCard(cardAddress, data.offer.address);
-    getFieldsCard(cardPrice, data.offer.price, '₽/ночь');
-    getFieldsCard(cardAddress, data.offer.address);
-    getTypeFieldCard(cardType, data.offer.type);
-    getCapacityFieldCard(cardCapacity, data.offer.rooms, data.offer.guests, ' команты для ', ' гостей');
-    getTimeFieldCard(cardTime, data.offer.checkin, data.offer.checkout, 'Заезд после ', ', выезд до ');
-    getFeaturesFieldCard(cardFeatures, data.offer.features);
-    getFieldsCard(cardDescription, data.offer.description);
-    getPhotosFieldCard(cardPhotos, data.offer.photos);
-    getAvatarFieldCard(cardAvatar, data.author.avatar);
+    getFields(cardTitle, data.offer.title);
+    getFields(cardAddress, data.offer.address);
+    getFields(cardPrice, data.offer.price, '₽/ночь');
+    getFields(cardAddress, data.offer.address);
+    getTypeField(cardType, data.offer.type);
+    getCapacityField(cardCapacity, data.offer.rooms, data.offer.guests, ' команты для ', ' гостей');
+    getTimeField(cardTime, data.offer.checkin, data.offer.checkout, 'Заезд после ', ', выезд до ');
+    getFeaturesField(cardFeatures, data.offer.features);
+    getFields(cardDescription, data.offer.description);
+    getPhotosField(cardPhotos, data.offer.photos);
+    getAvatarField(cardAvatar, data.author.avatar);
 
     var cardTabIndex = card.querySelector('.popup__close');
     cardTabIndex.setAttribute('tabindex', '0');

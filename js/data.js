@@ -66,7 +66,6 @@
     previewAvatar: previewAvatar,
     avatarFormSrc: avatarFormSrc,
     previewPhoto: previewPhoto
-
   };
 
 })();

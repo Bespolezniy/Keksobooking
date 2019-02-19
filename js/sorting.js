@@ -85,13 +85,14 @@
 
     /*прогоняем через фильтр*/
     var filter = function () {
-      return window.data.hotelPins.filter(function (item) {
+      return window.data.originPins.filter(function (item) {
         return (filterOfType(item) && filterOfPrice(item) && filterOfRooms(item) &&  filterOfGuests(item) && filterOfFeatures(item) );
       });
     };
+
     window.data.filtratedPins = filter();
     window.map.removePins();
-    window.map.renderPinsOnMap(window.data.filtratedPins);
+    window.map.setPinsOnMap(window.data.filtratedPins);
   };
 
   var debouncePins = window.utils.debounce(applyFilters);
